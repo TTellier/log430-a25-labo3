@@ -10,7 +10,7 @@ from store_manager import app
 
 @pytest.fixture
 def client():
-    app.config['TESTING'] = True
+    app.config.update(TESTING=True, PROPAGATE_EXCEPTIONS=True, TRAP_HTTP_EXCEPTIONS=True)
     with app.test_client() as client:
         yield client
 
