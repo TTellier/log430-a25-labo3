@@ -5,21 +5,21 @@ from db import get_redis_conn
 
 class Query(ObjectType):       
     product = graphene.Field(Product, id=String(required=True))
-    stock_level = Int(product_id=String(required=True))
+    stock_level = Int(id=String(required=True))
     
-    def resolve_product(self, info, product_id):
+    def resolve_product(self, info, id):
         """ Create an instance of Product based on stock info for that product that is in Redis """
         redis_client = get_redis_conn()
-        product_data = redis_client.hgetall(f"stock:{product_id}")
+        product_data = redis_client.hgetall(f"stock:{id}")
         # TODO: ajoutez les colonnes name, sku, price
-        product_data['name'] = redis_client.hget(f"product:{product_id}", "name")
-        product_data['sku'] = redis_client.hget(f"product:{product_id}", "sku")
-        product_data['price'] = redis_client.hget(f"product:{product_id}", "price")
+        product_data['name'] = redis_client.hget(f"product:{id}", "name")
+        product_data['sku'] = redis_client.hget(f"product:{id}", "sku")
+        product_data['price'] = redis_client.hget(f"product:{id}", "price")
     
         if product_data:
             return Product(
-                id=product_id,
-                name=f"Product {product_id}",
+                id=id,
+                name=f"Product {id}",
                 quantity=int(product_data['quantity'])
             )
         return None
