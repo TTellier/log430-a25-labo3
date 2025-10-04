@@ -12,6 +12,10 @@ class Query(ObjectType):
         redis_client = get_redis_conn()
         product_data = redis_client.hgetall(f"stock:{product_id}")
         # TODO: ajoutez les colonnes name, sku, price
+        product_data['name'] = redis_client.hget(f"product:{product_id}", "name")
+        product_data['sku'] = redis_client.hget(f"product:{product_id}", "sku")
+        product_data['price'] = redis_client.hget(f"product:{product_id}", "price")
+    
         if product_data:
             return Product(
                 id=product_id,
