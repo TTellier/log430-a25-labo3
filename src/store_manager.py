@@ -13,7 +13,7 @@ from stocks.controllers.stock_controller import get_stock, set_stock, get_stock_
 from sync_redis import sync_redis_with_mysql
  
 app = Flask(__name__)
-# sync_redis_with_mysql()
+sync_redis_with_mysql()
 
 @app.get('/health-check')
 def health():
